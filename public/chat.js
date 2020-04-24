@@ -1,4 +1,4 @@
-var socket = io.connect('https://blind123.herokuapp.com/');
+var socket = io.connect('https:localhost:4000');
 
 var message = document.getElementById('message'),
       handle = document.getElementById('handle'),
