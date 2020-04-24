@@ -4,14 +4,34 @@ var message = document.getElementById('message'),
       handle = document.getElementById('handle'),
       btn = document.getElementById('send'),
       output = document.getElementById('output');
+      myElement = document.getElementById('chat-window');
+
+var mc = new Hammer(myElement);
+
+
+mc.on("panleft panright tap press swipe", function(ev) {
+  if (ev.type == 'tap'){
+    let val = ".";
+    document.getElementById("message").value += val;
+    navigator.vibrate(200);
+  }else if(ev.type == 'press'){
+    let val = "-";
+    document.getElementById("message").value += val;
+    navigator.vibrate(400);
+  }else if(ev.type == 'swipe'){
+    socket.emit('chat', {
+      message: message.value,
+      handle: handle.value
+    });
+    message.value = "";
+    navigator.vibrate([800,800,1000]);
+  }
+
+});
 
 
 btn.addEventListener('click', function(){
-  socket.emit('chat', {
-      message: message.value,
-      handle: handle.value
-  });
-  message.value = "";
+  
 });
 
 socket.on('chat', function(data){
@@ -29,7 +49,7 @@ function morse(input) {
     const 
        audioContext = new (window.AudioContext || window.webkitAudioContext),
        outputType = ['audio', 'vibrate', 'blink'],
-       dit = 65, // base length of signal
+       dit = 100, // base length of signal
        dah = dit * 3,
        symbolSpace = dit,
        letterSpace = dah,
